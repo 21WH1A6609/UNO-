@@ -1,0 +1,297 @@
+current_player = 0
+                clock = pygame.time.Clock()
+                font = pygame.font.SysFont(None, 40)
+
+
+                # Game loop
+                running = True
+                while running:
+                    # Handle events
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            running = False
+
+                    # Draw background
+                    screen.fill((255, 255, 255))
+                    PLAY_MOUSE_POS = pygame.mouse.get_pos()
+
+
+                    '''PLAY_TEXT = get_font(45).render("This is the PLAY screen.", True, "White")
+                    PLAY_RECT = PLAY_TEXT.get_rect(center=(640, 260))
+                    screen.blit(PLAY_TEXT, PLAY_RECT)'''
+
+                    PLAY_BACK1 = Button(image=None, pos=(1100, 40),
+                                           text_input="RESTART", font=get_font(25), base_color="Black",
+                                           hovering_color="Aqua")
+                    PLAY_BACK1.changeColor(PLAY_MOUSE_POS)
+                    PLAY_BACK1.update(screen)
+
+                    PLAY_BACK2 = Button(image=None, pos=(1100, 680),
+                                        text_input="SETTING", font=get_font(25), base_color="Black",
+                                        hovering_color="Aqua")
+                    PLAY_BACK2.changeColor(PLAY_MOUSE_POS)
+                    PLAY_BACK2.update(screen)
+
+                    PLAY_BACK = Button(image=None, pos=(1100, 640),
+                                       text_input="BACK", font=get_font(45), base_color="Black", hovering_color="Green")
+
+                    PLAY_BACK.changeColor(PLAY_MOUSE_POS)
+                    PLAY_BACK.update(screen)
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
+                            main_menu()
+                        if PLAY_BACK1.checkForInput(PLAY_MOUSE_POS):
+                            flag = 1
+                            break
+                        if PLAY_BACK2.checkForInput(PLAY_MOUSE_POS):
+                            setting()
+
+                    # Draw discard pile
+                        
+                    if len(discard_pile) > 0:
+                        card = discard_pile[-1]
+                        card_image = cards[card]
+                        screen.blit(card_image, (screen_width // 2 - 50, screen_height // 2 - 75))
+
+                    # Draw player's hand
+                    player_hand = players[current_player]
+                    for i, card in enumerate(player_hand):
+                        card_image = cards[card]
+                        screen.blit(card_image, (i*110 + 10, screen_height - 160))
+
+                    # Draw text
+                    text = font.render(f"Player {current_player+1}'s turn", True, (0, 0, 0))
+                    screen.blit(text, (10, 10))
+                    screen.blit(card_back, (100, 200))
+                    # Update screen
+                    pygame.display.update()
+
+                    # Get user input
+                    if current_player == 0:
+                        if len(player_hand) == 0:
+                            PLAY_TEXT = get_font(45).render("Player1 Won.", True, "White")
+                        for event in pygame.event.get():
+                            if event.type == pygame.MOUSEBUTTONDOWN:
+                                pos = pygame.mouse.get_pos()
+                                for i, card in enumerate(player_hand):
+                                    if i*110 + 10 <= pos[0] <= i*110 + 110 and screen_height - 160 <= pos[1] <= screen_height - 10:
+                                        if card.split("")[0] in discard_pile[-1] or card.split("")[1] in discard_pile[-1]:
+                                            discard_pile.append(card)
+                                            player_hand.remove(card)
+                                            current_player += 1
+                                            current_player %= len(players)
+                                        else:
+                                            text = font.render("Invalid move, select correct card or draw a card.", True, (250, 0, 0))
+                                            screen.blit(text, (10, 60))
+                                            pygame.display.update()
+                                            pygame.time.delay(3000)
+                    else:
+                        # Computer player
+                        card_played = False
+                        if len(player_hand) == 0:
+                            PLAY_TEXT = get_font(45).render("Player1 Won.", True, "White")
+                        for card in player_hand:
+                            if card.split("")[0] in discard_pile[-1] or card.split("")[1] in discard_pile[-1]:
+                                discard_pile.append(card)
+                                player_hand.remove(card)
+                                current_player += 1
+                                current_player %= len(players)
+                                card_played = True
+                                break
+                        if not card_played:
+                            player_hand.append(deck.pop())
+
+                        pygame.time.wait(1000)
+                        #continue
+                if flag == 1:
+                    play()
+                # Quit Pygame
+                pygame.quit()
+
+
+
+
+
+
+
+
+
+
+
+
+        def setting():
+            while True:
+                SETTING_MOUSE_POS = pygame.mouse.get_pos()
+
+                SCREEN.fill("black")
+
+                OPTIONS_BACK3 = Button(image=None, pos=(640, 180),
+                                     text_input="MUSIC ON/OFF", font=get_font(35), base_color="White", hovering_color="Aqua")
+                OPTIONS_BACK3.changeColor(SETTING_MOUSE_POS)
+                OPTIONS_BACK3.update(SCREEN)
+
+                OPTIONS_BACK4 = Button(image=None, pos=(640, 380),
+                                   text_input="QUIT", font=get_font(35), base_color="White", hovering_color="Aqua")
+
+                OPTIONS_BACK4 .changeColor(SETTING_MOUSE_POS)
+                OPTIONS_BACK4 .update(SCREEN)
+
+                OPTIONS_BACK5 = Button(image=None, pos=(640, 280),
+                                       text_input="HELP", font=get_font(35), base_color="White", hovering_color="Aqua")
+
+                OPTIONS_BACK5.changeColor(SETTING_MOUSE_POS)
+                OPTIONS_BACK5.update(SCREEN)
+
+                OPTIONS_BACK6 = Button(image=None, pos=(640, 480),
+                                      text_input="BACK", font=get_font(35), base_color="White", hovering_color="Green")
+
+                OPTIONS_BACK6.changeColor(SETTING_MOUSE_POS)
+                OPTIONS_BACK6.update(SCREEN)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if OPTIONS_BACK3.checkForInput(SETTING_MOUSE_POS):
+                            #main_menu()  # toggle pause flag
+                            if pygame.mixer.music.get_busy():
+                                pygame.mixer.music.pause()  # pause music
+                            else:
+                                pygame.mixer.music.unpause()
+                        if OPTIONS_BACK4.checkForInput(SETTING_MOUSE_POS):
+                            quit()
+                        if OPTIONS_BACK5.checkForInput(SETTING_MOUSE_POS):
+                            help1()
+                        if OPTIONS_BACK6.checkForInput(SETTING_MOUSE_POS):
+                            play()
+
+                pygame.display.update()
+
+        def options():
+            while True:
+                OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+
+                SCREEN.fill("black")
+
+                OPTIONS_BACK1 = Button(image=None, pos=(620, 280),
+                                     text_input="MUSIC ON/OFF", font=get_font(45), base_color="#d7fcd4", hovering_color="Aqua")
+                OPTIONS_BACK1.changeColor(OPTIONS_MOUSE_POS)
+                OPTIONS_BACK1.update(SCREEN)
+
+                OPTIONS_BACK = Button(image=None, pos=(640, 460),
+                                   text_input="BACK", font=get_font(45), base_color="White", hovering_color="Green")
+
+                OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
+                OPTIONS_BACK.update(SCREEN)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if OPTIONS_BACK1.checkForInput(OPTIONS_MOUSE_POS):
+                            #main_menu()  # toggle pause flag
+                            if pygame.mixer.music.get_busy():
+                                pygame.mixer.music.pause()  # pause music
+                            else:
+                                pygame.mixer.music.unpause()
+                        if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
+                            main_menu()
+                pygame.display.update()
+
+
+        def help():
+            while True:
+                HELP_MOUSE_POS = pygame.mouse.get_pos()
+                SCREEN.fill("Black")
+
+                HELP_TEXT = pygame.image.load('C:/Users/nehas/OneDrive/Documents/python/images/rules.jpeg')
+                HELP_RECT = HELP_TEXT.get_rect(center=(640, 280))
+                SCREEN.blit(HELP_TEXT, HELP_RECT)
+
+                HELP_BACK = Button(image=None, pos=(640, 600),
+                                      text_input="BACK", font=get_font(45), base_color="White", hovering_color="Green")
+
+                HELP_BACK.changeColor(HELP_MOUSE_POS)
+                HELP_BACK.update(SCREEN)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if HELP_BACK.checkForInput(HELP_MOUSE_POS):
+                            main_menu()
+
+                pygame.display.update()
+
+        def help1():
+            while True:
+                HELP_MOUSE_POS1 = pygame.mouse.get_pos()
+
+                SCREEN.fill("Black")
+
+                HELP_TEXT1 = pygame.image.load('C:/Users/nehas/OneDrive/Documents/python/images/rules.jpeg')
+                HELP_RECT1 = HELP_TEXT1.get_rect(center=(640, 280))
+                SCREEN.blit(HELP_TEXT1, HELP_RECT1)
+
+                HELP_BACK1 = Button(image=None, pos=(640, 600),
+                                      text_input="BACK", font=get_font(45), base_color="White", hovering_color="Green")
+
+                HELP_BACK1.changeColor(HELP_MOUSE_POS1)
+                HELP_BACK1.update(SCREEN)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if HELP_BACK1.checkForInput(HELP_MOUSE_POS1):
+                            setting()
+
+                pygame.display.update()
+
+        def main_menu():
+            while True:
+                SCREEN.blit(BG, (0, 0))
+
+                MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+                MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")
+                MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+
+                PLAY_BUTTON = Button(image=None, pos=(450, 260),
+                                     text_input="PLAY", font=get_font(45), base_color="#d7fcd4", hovering_color="Black")
+                OPTIONS_BUTTON = Button(image=None, pos=(780, 260),
+                                     text_input="OPTIONS", font=get_font(45), base_color="#d7fcd4", hovering_color="Black")
+                HELP_BUTTON = Button(image=None, pos=(450, 400),
+                                        text_input="HELP", font=get_font(45), base_color="#d7fcd4", hovering_color="Black")
+                QUIT_BUTTON = Button(image=None, pos=(780, 400),
+                                     text_input="QUIT", font=get_font(45), base_color="#d7fcd4", hovering_color="Black")
+
+                SCREEN.blit(MENU_TEXT, MENU_RECT)
+
+                for button in [PLAY_BUTTON, OPTIONS_BUTTON, HELP_BUTTON, QUIT_BUTTON]:
+                    button.changeColor(MENU_MOUSE_POS)
+                    button.update(SCREEN)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                            play()
+                        if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                            options()
+                        if HELP_BUTTON.checkForInput(MENU_MOUSE_POS):
+                            help()
+                        if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                            pygame.quit()
+                            sys.exit()
+
+                pygame.display.update()
+
+
+        main_menu()
