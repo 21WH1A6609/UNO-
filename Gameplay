@@ -1,0 +1,15 @@
+import pygame
+
+pygame.init()
+
+screen = pygame.display.set_mode((1270, 722))
+pygame.display.set_caption('My Game')
+#screen.fill((255, 255, 255))
+
+splash_img = pygame.image.load('C:/Users/nehas/OneDrive/Documents/python/images/splash.jpeg')
+screen.blit(splash_img, (0, 0))
+pygame.display.update()
+pygame.time.wait(3000)
+start()
+pygame.display.update()
+pygame.quit()
