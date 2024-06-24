@@ -1,0 +1,93 @@
+def start():
+        import pygame
+        import sys
+        #from button import Button
+        import pygame.mixer
+        pygame.init()
+        
+        SCREEN = pygame.display.set_mode((1280, 720))
+        pygame.display.set_caption("Menu")
+
+        BG = pygame.image.load('C:/Users/nehas/OneDrive/Documents/python/images/hit.jpeg')
+        pygame.mixer.music.load('C:/Users/nehas/OneDrive/Documents/python/images/stay-retro-124958.mp3')
+        pygame.mixer.music.play()
+        def get_font(size):  # Returns Press-Start-2P in the desired size
+            return pygame.font.Font('C:/Users/nehas/OneDrive/Documents/python/images/font (1).ttf', size)
+
+
+
+        def play():
+                import pygame
+                import random
+
+                # Initialize Pygame
+                pygame.init()
+
+                # Set screen size
+                screen_width = 1280
+                screen_height = 720
+                screen = pygame.display.set_mode((screen_width, screen_height))
+
+                # Set game title
+                pygame.display.set_caption("Uno Game")
+
+
+                # Load card images
+                cards = {}
+                for color in ['red', 'blue', 'green', 'yellow']:
+                    for number in range(0, 10):
+                        filename = f"f'C:/Users/nehas/OneDrive/Documents/python/images/{color}_{number}"
+                        cards[f"{color}{number}"] = pygame.image.load(f'C:/Users/nehas/OneDrive/Documents/python/images/{color}{number}.jpeg')
+                        cards[f"{color}{number}"] = pygame.transform.scale(cards[f"{color}{number}"], (100, 150))
+                    for card in [f'{color}skip', f'{color}_reverse', f'{color}_draw2']:
+                        cards[f'{color}_skip'] = pygame.image.load(f'C:/Users/nehas/OneDrive/Documents/python/images/{color}_skip.jpeg')
+                        cards[f'{color}_skip'] = pygame.transform.scale(cards[f'{color}_skip'], (100, 150))
+                        cards[f'{color}_reverse'] = pygame.image.load(f'C:/Users/nehas/OneDrive/Documents/python/images/{color}_reverse.jpeg')
+                        cards[f'{color}_reverse'] = pygame.transform.scale(cards[f'{color}_reverse'], (100, 150))
+                        cards[f'{color}_draw2'] = pygame.image.load(f'C:/Users/nehas/OneDrive/Documents/python/images/{color}_draw2.jpeg')
+                        cards[f'{color}_draw2'] = pygame.transform.scale(cards[f'{color}_draw2'], (100, 150))
+                    # Load special card images
+                cards[f'wild_wild'] = pygame.image.load('C:/Users/nehas/OneDrive/Documents/python/images/wild_wild.jpeg')
+                cards[f'wild_wild_draw4'] = pygame.image.load('C:/Users/nehas/OneDrive/Documents/python/images/wild_wild_draw4.jpeg')
+                for card in ['wild_wild', 'wild_wild_draw4']:
+                    cards[card] = pygame.transform.scale(cards[f"{card}"], (100, 150))
+
+
+                # Create deck
+                deck = []
+                for color in ['red', 'blue', 'green', 'yellow']:
+                    for number in range(0, 10):
+                        deck.append(f"{color}_{number}")
+                        deck.append(f"{color}_{number}")
+                    deck.append(f"{color}_skip")
+                    deck.append(f"{color}_reverse")
+                    deck.append(f"{color}_draw2")
+                random.shuffle(deck)
+                deck.append('wild_wild')
+                deck.append('wild_wild')
+                deck.append('wild_wild_draw4')
+                deck.append('wild_wild_draw4')
+                random.shuffle(deck)
+
+
+
+
+                card_back = pygame.image.load(f'C:/Users/nehas/OneDrive/Documents/python/images/back_card.png')
+                card_back = pygame.transform.scale(card_back, (130, 170))
+
+
+                # Create players
+                player_hand_size = 7
+                players = []
+                for i in range(2):
+                    player_hand = []
+                    for j in range(player_hand_size):
+                        card = deck.pop()
+                        player_hand.append(card)
+                    players.append(player_hand)
+
+                # Create discard pile
+                discard_pile = []
+                discard_pile.append(deck.pop())
+
+                # Set game variables
